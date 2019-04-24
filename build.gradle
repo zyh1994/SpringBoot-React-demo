@@ -27,21 +27,22 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-web')
     testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
+//上述是spring基础依赖
 
 task npmBuild(type: Exec) {
-    workingDir = file(NODE_PROJ_DIR)
-    commandLine NODE_MANAGER, "run", "build"
+    workingDir NODE_PROJ_DIR
+    commandLine 'cmd', '/c', NODE_MANAGER+' run build'
 }
 
 task npmInstall(type: Exec) {
     workingDir = file(NODE_PROJ_DIR)
-    commandLine NODE_MANAGER, "install"
+    commandLine 'cmd', '/c', NODE_MANAGER+' install'
 }
 
 task frontendAssemble(type: Copy, dependsOn: "npmBuild") {
     def buildDir = file("$NODE_PROJ_DIR/build")
     from buildDir
-    into "build/resources/main/static"
+    into SPRING_STATIC
 }
 
 processResources.dependsOn 'frontendAssemble'
